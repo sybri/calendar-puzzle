@@ -5,11 +5,15 @@ import "../render/puzzle-board.js";
 
 import wooodzConfig from "../../configs/wooodz-calendar.json";
 import puzzleDayConfig from "../../configs/puzzle-day.json";
+import wholeYearConfig from "../../configs/whole-year.json";
+import puzzleMyDayConfig from "../../configs/puzzle-my-day.json";
 
 // Registre des configs disponibles
 const CONFIGS: Record<string, PuzzleConfig> = {
   "Wooodz Calendar": wooodzConfig as PuzzleConfig,
   "Puzzle Jour": puzzleDayConfig as PuzzleConfig,
+  "The Whole Year Puzzle": wholeYearConfig as PuzzleConfig,
+  "Puzzle My Day": puzzleMyDayConfig as PuzzleConfig,
 };
 
 const configNames = Object.keys(CONFIGS);
