@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/sybri/calendar-puzzle/compare/v1.1.0...v1.2.0) (2026-04-16)
+
+
+### Features
+
+* **test:** add vitest unit tests and storybook play functions ([92a526b](https://github.com/sybri/calendar-puzzle/commit/92a526b40c380e909aa2bdd6821db1974b2b4ecc))
+
 # [1.1.0](https://github.com/sybri/calendar-puzzle/compare/v1.0.1...v1.1.0) (2026-04-16)
 
 
