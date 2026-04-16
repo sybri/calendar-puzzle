@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/sybri/calendar-puzzle/compare/v1.4.0...v1.5.0) (2026-04-16)
+
+
+### Features
+
+* **configs:** add Whole Year Puzzle and Puzzle My Day configs ([d343b24](https://github.com/sybri/calendar-puzzle/commit/d343b2468544e284399a78631e2c12f0532ca4bf))
+
 # [1.4.0](https://github.com/sybri/calendar-puzzle/compare/v1.3.0...v1.4.0) (2026-04-16)
 
 
