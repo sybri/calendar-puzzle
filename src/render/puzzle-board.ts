@@ -314,10 +314,13 @@ export class PuzzleBoardElement extends HTMLElement {
 
     this.appendChild(grid);
 
-    // Légende
-    if (this._showLegend && this._solution && pieceNames.length > 0) {
+    // Légende — toujours rendue pour réserver l'espace, masquée via visibility
+    if (this._solution && pieceNames.length > 0) {
       const legend = document.createElement("div");
       legend.className = "mt-2 sm:mt-4 flex flex-wrap gap-1 sm:gap-2";
+      if (!this._showLegend) {
+        legend.style.visibility = "hidden";
+      }
 
       for (const name of pieceNames) {
         const color = colorMap.get(name)!;
