@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/sybri/calendar-puzzle/compare/v1.2.1...v1.3.0) (2026-04-16)
+
+
+### Features
+
+* **storybook:** show JS code snippets in theme stories ([04e4507](https://github.com/sybri/calendar-puzzle/commit/04e4507a8ad858b842488461e4e1806c9d48e5a9))
+
 ## [1.2.1](https://github.com/sybri/calendar-puzzle/compare/v1.2.0...v1.2.1) (2026-04-16)
 
 
