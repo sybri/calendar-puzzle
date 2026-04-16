@@ -1,0 +1,49 @@
+{
+  "name": "calendar-puzzle",
+  "version": "0.0.0-development",
+  "description": "Solveur de puzzle calendrier configurable avec web component",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sybri/calendar-puzzle.git"
+  },
+  "homepage": "https://sybri.github.io/calendar-puzzle",
+  "author": "Sylvain BRISSY <sylvain.brissy@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./config/*": "./configs/*"
+  },
+  "bin": {
+    "calendar-puzzle": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "configs"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@storybook/web-components": "^10.3.5",
+    "@storybook/web-components-vite": "^10.3.5",
+    "lit": "^3.3.2",
+    "semantic-release": "^25.0.3",
+    "storybook": "^10.3.5",
+    "tsup": "^8",
+    "typescript": "^5"
+  }
+}

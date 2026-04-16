@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendar Puzzle — Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4 sm:p-8">
+  <div class="max-w-md w-full space-y-4 sm:space-y-6">
+    <h1 class="text-2xl font-bold text-gray-900 text-center">Calendar Puzzle</h1>
+
+    <form id="form" class="flex flex-wrap gap-2 justify-center">
+      <select id="month" class="rounded border px-3 py-2 text-sm"></select>
+      <select id="day" class="rounded border px-3 py-2 text-sm"></select>
+      <select id="weekday" class="rounded border px-3 py-2 text-sm"></select>
+      <button type="submit" class="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+        Résoudre
+      </button>
+    </form>
+
+    <div id="status" class="text-center text-sm text-gray-500"></div>
+
+    <puzzle-board id="board" class="block"></puzzle-board>
+  </div>
+
+  <script type="module">
+    import { createSolver, defaultConfig, PuzzleBoardElement } from "../dist/index.js";
+
+    const config = defaultConfig;
+    const { solve } = createSolver(config);
+
+    const board = document.getElementById("board");
+    board.config = config;
+
+    // Remplir les selects depuis la config
+    const monthSelect   = document.getElementById("month");
+    const daySelect     = document.getElementById("day");
+    const weekdaySelect = document.getElementById("weekday");
+
+    const labels = config.labels ?? {};
+
+    for (const v of config.groups.month) {
+      const opt = new Option(labels[v] ?? v, v);
+      monthSelect.appendChild(opt);
+    }
+    for (const v of config.groups.day) {
+      const opt = new Option(labels[v] ?? v, v);
+      daySelect.appendChild(opt);
+    }
+    for (const v of config.groups.weekday) {
+      const opt = new Option(labels[v] ?? v, v);
+      weekdaySelect.appendChild(opt);
+    }
+
+    // Pré-sélectionner la date du jour
+    const now = new Date();
+    monthSelect.selectedIndex = now.getMonth();
+    daySelect.selectedIndex = now.getDate() - 1;
+    weekdaySelect.selectedIndex = (now.getDay() + 6) % 7; // Lundi = 0
+
+    document.getElementById("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const target = {
+        month:   monthSelect.value,
+        day:     daySelect.value,
+        weekday: weekdaySelect.value,
+      };
+
+      const status = document.getElementById("status");
+      status.textContent = "Résolution en cours…";
+
+      requestAnimationFrame(() => {
+        const result = solve(target);
+        if (result.solution) {
+          status.textContent = `Solution trouvée en ${(result.elapsedMs / 1000).toFixed(3)}s — ${result.attempts.toLocaleString("fr-FR")} essais`;
+          board.target = target;
+          board.solution = result.solution;
+        } else {
+          status.textContent = `Aucune solution trouvée (${(result.elapsedMs / 1000).toFixed(3)}s)`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
