@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/sybri/calendar-puzzle/compare/v1.3.0...v1.4.0) (2026-04-16)
+
+
+### Features
+
+* **component:** add autoResolve mode and resolve(target?) argument ([7d9499a](https://github.com/sybri/calendar-puzzle/commit/7d9499a9be4e3cc156463f78782df0d1cc70b39a))
+
 # [1.3.0](https://github.com/sybri/calendar-puzzle/compare/v1.2.1...v1.3.0) (2026-04-16)
 
 
