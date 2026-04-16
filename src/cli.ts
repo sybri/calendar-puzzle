@@ -159,20 +159,20 @@ function main(): void {
   const month = parseMonth(args[0]);
   if (!month) {
     console.error(`Mois invalide : "${args[0]}"`);
-    process.exit(1);
+    return process.exit(1);
   }
   const day = parseDay(args[1]);
   if (!day) {
     console.error(`Jour invalide : "${args[1]}" (1-31)`);
-    process.exit(1);
+    return process.exit(1);
   }
   const weekday = parseWeekday(args[2]);
   if (!weekday) {
     console.error(`Jour semaine invalide : "${args[2]}"`);
-    process.exit(1);
+    return process.exit(1);
   }
 
-  const target = { month, day, weekday };
+  const target: Record<string, string> = { month, day, weekday };
   const config: PuzzleConfig = defaultConfig;
   const { board, solve } = createSolver(config);
 
