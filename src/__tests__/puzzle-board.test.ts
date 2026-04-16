@@ -135,4 +135,44 @@ describe("PuzzleBoardElement", () => {
     expect(result).toBeNull();
     cleanup(el);
   });
+
+  it("resolve(target) accepts target as argument", () => {
+    const el = createBoard() as any;
+    el.config = config;
+    const result = el.resolve(target);
+    expect(result).not.toBeNull();
+    expect(result!.solution).not.toBeNull();
+    expect(el.target).toEqual(target);
+    cleanup(el);
+  });
+
+  it("autoResolve=false does not solve on target change", () => {
+    const el = createBoard() as any;
+    el.autoResolve = false;
+    el.config = config;
+    el.target = target;
+    // No solution yet — resolve() not called
+    expect(el.solution).toBeNull();
+    cleanup(el);
+  });
+
+  it("autoResolve=false shows a resolve button", () => {
+    const el = createBoard() as any;
+    el.autoResolve = false;
+    el.config = config;
+    el.target = target;
+    const btn = el.querySelector("button");
+    expect(btn).not.toBeNull();
+    expect(btn!.textContent).toBe("Résoudre");
+    cleanup(el);
+  });
+
+  it("autoResolve=true (default) resolves on target change", () => {
+    const el = createBoard() as any;
+    el.config = config;
+    el.target = target;
+    // autoResolve is true by default, so solution should already be set
+    expect(el.solution).not.toBeNull();
+    cleanup(el);
+  });
 });

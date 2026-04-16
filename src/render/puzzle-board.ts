@@ -29,13 +29,18 @@ export class PuzzleBoardElement extends HTMLElement {
   private _hideLabels = false;
   private _cellRatio = 1;
   private _showLegend = true;
+  private _autoResolve = true;
   private _pieceColors: PieceColor[] = PIECE_COLORS;
   private _targetClasses: string = TARGET_CLASSES;
   private _emptyClasses: string = "bg-gray-200 text-gray-700";
 
   set config(cfg: PuzzleConfig) {
     this._config = cfg;
-    this.render();
+    if (this._autoResolve && this._target) {
+      this.resolve();
+    } else {
+      this.render();
+    }
   }
   get config(): PuzzleConfig | null {
     return this._config;
@@ -43,10 +48,23 @@ export class PuzzleBoardElement extends HTMLElement {
 
   set target(t: Record<string, string>) {
     this._target = t;
-    this.render();
+    if (this._autoResolve) {
+      this.resolve();
+    } else {
+      this.render();
+    }
   }
   get target(): Record<string, string> | null {
     return this._target;
+  }
+
+  /** Résolution automatique quand config ou target changent (défaut: true). */
+  set autoResolve(v: boolean) {
+    this._autoResolve = v;
+    this.render();
+  }
+  get autoResolve(): boolean {
+    return this._autoResolve;
   }
 
   set solution(sol: Solution) {
@@ -111,11 +129,12 @@ export class PuzzleBoardElement extends HTMLElement {
   }
 
   /**
-   * Résout le puzzle pour la cible courante et met à jour le rendu.
+   * Résout le puzzle et met à jour le rendu.
+   * @param target — si fourni, met à jour `this._target` avant de résoudre.
    * Émet un CustomEvent "puzzle-solved" avec le SolveResult en detail.
-   * Nécessite que `config` et `target` soient déjà définis.
    */
-  resolve(): SolveResult | null {
+  resolve(target?: Record<string, string>): SolveResult | null {
+    if (target) this._target = target;
     if (!this._config || !this._target) return null;
 
     const { solve } = createSolver(this._config);
@@ -313,6 +332,16 @@ export class PuzzleBoardElement extends HTMLElement {
     }
 
     this.appendChild(grid);
+
+    // Bouton "Résoudre" en mode manuel
+    if (!this._autoResolve && this._target) {
+      const btn = document.createElement("button");
+      btn.textContent = "Résoudre";
+      btn.className =
+        "mt-2 sm:mt-4 w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 active:bg-blue-800 transition-colors";
+      btn.addEventListener("click", () => this.resolve());
+      this.appendChild(btn);
+    }
 
     // Légende — toujours rendue pour réserver l'espace, masquée via visibility
     if (this._solution && pieceNames.length > 0) {

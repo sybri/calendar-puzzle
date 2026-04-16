@@ -20,6 +20,7 @@ interface PuzzleBoardArgs {
   showDatePicker: boolean;
   showResult: boolean;
   showLegend: boolean;
+  autoResolve: boolean;
   cellRatio: number;
   onPuzzleSolved: (...args: unknown[]) => void;
   [key: string]: unknown;
@@ -113,13 +114,17 @@ function renderBoard(args: PuzzleBoardArgs) {
   wrapper.appendChild(info);
 
   function updateBoard() {
+    (boardEl as any).autoResolve = args.autoResolve ?? true;
     (boardEl as any).config = config;
     (boardEl as any).target = target;
     (boardEl as any).hideLabels = args.hideLabels;
     (boardEl as any).cellRatio = args.cellRatio ?? 1;
     (boardEl as any).showLegend = args.showLegend ?? true;
 
-    const result = (boardEl as any).resolve();
+    // En mode autoResolve, la résolution a déjà eu lieu via le setter target
+    const result = (args.autoResolve ?? true)
+      ? (boardEl as any).resolve()
+      : null;
 
     if (args.showResult ?? true) {
       if (result?.solution) {
@@ -158,6 +163,11 @@ const meta: Meta = {
       control: "boolean",
       description: "Afficher la légende des pièces sous le plateau",
     },
+    autoResolve: {
+      control: "boolean",
+      description:
+        "Résolution automatique quand config/target changent. Si false, un bouton Résoudre apparaît.",
+    },
     showDatePicker: {
       control: "boolean",
       description: "Afficher le sélecteur de date interactif",
@@ -182,6 +192,7 @@ export const Today: StoryObj = {
     showResult: true,
     showLegend: true,
     showDatePicker: true,
+    autoResolve: true,
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
@@ -217,6 +228,7 @@ export const HiddenLabels: StoryObj = {
     showResult: true,
     showLegend: false,
     showDatePicker: false,
+    autoResolve: true,
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
@@ -249,6 +261,7 @@ export const PuzzleDay: StoryObj = {
     showResult: true,
     showLegend: true,
     showDatePicker: true,
+    autoResolve: true,
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
@@ -464,6 +477,7 @@ export const EmptyBoard: StoryObj = {
     showResult: false,
     showLegend: false,
     showDatePicker: false,
+    autoResolve: true,
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
