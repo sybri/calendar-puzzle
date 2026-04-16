@@ -1,5 +1,5 @@
 {
-  "name": "calendar-puzzle",
+  "name": "@sybri/calendar-puzzle",
   "version": "1.2.0",
   "description": "Solveur de puzzle calendrier configurable avec web component",
   "repository": {
@@ -23,6 +23,9 @@
   },
   "bin": {
     "calendar-puzzle": "./dist/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist",

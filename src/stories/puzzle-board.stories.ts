@@ -286,7 +286,7 @@ export const PuzzleDay: StoryObj = {
 // ---------------------------------------------------------------------------
 
 const API_SNIPPET = `\
-import { todayTarget, createSolver, defaultConfig } from "calendar-puzzle";
+import { todayTarget, createSolver, defaultConfig } from "@sybri/calendar-puzzle";
 
 // 1. Récupérer le composant
 const board = document.querySelector("puzzle-board");
