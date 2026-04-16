@@ -1,6 +1,6 @@
 // Config
 export type { PuzzleConfig } from "./config.js";
-export { validateConfig } from "./config.js";
+export { validateConfig, todayTarget } from "./config.js";
 
 // Types
 export type { CellKey, Placement, Solution, SolveResult } from "./types.js";

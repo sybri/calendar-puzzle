@@ -16,6 +16,44 @@ export interface PuzzleConfig {
   pieces: Record<string, number[][]>;
 }
 
+/**
+ * Construit un target "aujourd'hui" pour une config donnée.
+ *
+ * Convention des groupes reconnus :
+ * - `month`   → index par `Date.getMonth()` (0 = janvier)
+ * - `day`     → index par `Date.getDate() - 1` (jour du mois, 1-based → 0-based)
+ * - `weekday` → index par jour de la semaine, lundi = 0
+ *
+ * Les groupes non reconnus reçoivent la première valeur par défaut.
+ * @param date — date à utiliser (défaut : maintenant)
+ */
+export function todayTarget(
+  config: PuzzleConfig,
+  date: Date = new Date(),
+): Record<string, string> {
+  const target: Record<string, string> = {};
+
+  for (const [group, values] of Object.entries(config.groups)) {
+    let index: number;
+    switch (group) {
+      case "month":
+        index = date.getMonth();
+        break;
+      case "day":
+        index = date.getDate() - 1;
+        break;
+      case "weekday":
+        index = (date.getDay() + 6) % 7; // lundi = 0
+        break;
+      default:
+        index = 0;
+    }
+    target[group] = values[index] ?? values[0];
+  }
+
+  return target;
+}
+
 /** Valide une config et lève une erreur si incohérente. */
 export function validateConfig(config: PuzzleConfig): void {
   const gridValues = new Set<string>();
