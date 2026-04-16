@@ -1,5 +1,11 @@
 # Calendar Puzzle
 
+<p align="center">
+  <img src="docs/images/puzzle-board.jpg" alt="Le plateau du puzzle calendrier Wooodz" width="280">
+  <img src="docs/images/puzzle-pieces.jpg" alt="Les 10 pieces du puzzle et le plateau" width="280">
+  <img src="docs/images/puzzle-solved.jpg" alt="Puzzle resolu : Avril 16 Jeudi" width="280">
+</p>
+
 Lors d'une balade, j'ai craque pour un bel objet en bois : un casse-tete calendrier. Le principe est simple — des pieces de type tetromino/pentomino a poser sur un plateau pour representer n'importe quelle date de l'annee, en laissant visibles exactement trois cases : le mois, le jour et le jour de la semaine.
 
 J'ai reussi quelques dates... puis je me suis retrouve bloque pendant des heures. En cherchant sur Internet, j'ai decouvert que ce type de puzzle etait assez repandu, mais le mien en particulier n'existait nulle part — impossible de trouver les solutions.
