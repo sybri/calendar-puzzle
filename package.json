@@ -1,6 +1,6 @@
 {
   "name": "calendar-puzzle",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "Solveur de puzzle calendrier configurable avec web component",
   "repository": {
     "type": "git",
