@@ -29,12 +29,14 @@ function renderBoard(args: PuzzleBoardArgs) {
   const groupNames = Object.keys(config.groups);
   const labels = config.labels ?? {};
 
-  // Construire la cible depuis les args dynamiques
+  // Construire la cible depuis les args dynamiques, avec fallback sur la 1ère valeur du groupe
   const target: Record<string, string> = {};
   for (const group of groupNames) {
     const val = args[group];
     if (typeof val === "string" && val) {
       target[group] = val;
+    } else {
+      target[group] = config.groups[group][0];
     }
   }
 
@@ -162,21 +164,6 @@ const meta: Meta = {
       control: { type: "range", min: 0.4, max: 1.5, step: 0.1 },
       description: "Ratio hauteur/largeur d'une case (1 = carré)",
     },
-    month: {
-      control: "select",
-      options: (wooodzConfig as PuzzleConfig).groups.month,
-      description: "Mois cible",
-    },
-    day: {
-      control: "select",
-      options: (wooodzConfig as PuzzleConfig).groups.day,
-      description: "Jour cible",
-    },
-    weekday: {
-      control: "select",
-      options: (wooodzConfig as PuzzleConfig).groups.weekday,
-      description: "Jour de la semaine cible (Wooodz uniquement)",
-    },
     onPuzzleSolved: {
       action: "puzzle-solved",
       description: "Événement émis quand le puzzle est résolu",
@@ -194,11 +181,6 @@ export const Today: StoryObj = {
     showLegend: true,
     showDatePicker: true,
     cellRatio: 1,
-    month: (wooodzConfig as PuzzleConfig).groups.month[new Date().getMonth()],
-    day: String(new Date().getDate()),
-    weekday: (wooodzConfig as PuzzleConfig).groups.weekday[
-      (new Date().getDay() + 6) % 7
-    ],
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
 };
@@ -211,9 +193,6 @@ export const HiddenLabels: StoryObj = {
     showLegend: false,
     showDatePicker: false,
     cellRatio: 1,
-    month: "Avr",
-    day: "16",
-    weekday: "Mercredi",
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
 };
@@ -226,8 +205,6 @@ export const PuzzleDay: StoryObj = {
     showLegend: true,
     showDatePicker: true,
     cellRatio: 1,
-    month: "Avr",
-    day: "16",
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
 };
@@ -240,9 +217,6 @@ export const EmptyBoard: StoryObj = {
     showLegend: false,
     showDatePicker: false,
     cellRatio: 1,
-    month: "Jan",
-    day: "1",
-    weekday: "Lundi",
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
 };
