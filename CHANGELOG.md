@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/sybri/calendar-puzzle/compare/v1.2.0...v1.2.1) (2026-04-16)
+
+
+### Bug Fixes
+
+* **npm:** scope package as @sybri/calendar-puzzle for granular tokens ([bb2b530](https://github.com/sybri/calendar-puzzle/commit/bb2b530cf97f4b552b6681ca8e52fb2f7879fdd8))
+
 # [1.2.0](https://github.com/sybri/calendar-puzzle/compare/v1.1.0...v1.2.0) (2026-04-16)
 
 
