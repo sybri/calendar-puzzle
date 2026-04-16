@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { expect, within, waitFor, userEvent } from "storybook/test";
 import { type PuzzleConfig, todayTarget } from "../config.js";
 import "../render/puzzle-board.js";
 
@@ -184,6 +185,29 @@ export const Today: StoryObj = {
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Le puzzle-board est rendu
+    const board = canvasElement.querySelector("puzzle-board");
+    await expect(board).toBeTruthy();
+
+    // Des cellules de grille sont rendues (wooodz 7×8 = 56)
+    const cells = canvasElement.querySelectorAll("puzzle-board div > div");
+    await expect(cells.length).toBeGreaterThan(40);
+
+    // 3 cases cibles ont la classe ring-2
+    const targetCells = canvasElement.querySelectorAll("puzzle-board .ring-2");
+    await expect(targetCells.length).toBe(3);
+
+    // Le texte de résultat contient "Solution en"
+    const info = canvas.getByText(/Solution en/);
+    await expect(info).toBeTruthy();
+
+    // La légende est visible avec les 10 pièces
+    const badges = canvasElement.querySelectorAll("puzzle-board span.inline-flex");
+    await expect(badges.length).toBe(10);
+  },
 };
 
 export const HiddenLabels: StoryObj = {
@@ -196,6 +220,26 @@ export const HiddenLabels: StoryObj = {
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
+  play: async ({ canvasElement }) => {
+    const board = canvasElement.querySelector("puzzle-board")!;
+
+    // Les cases couvertes par des pièces ont un texte vide
+    const cells = Array.from(board.querySelectorAll("div > div.flex"));
+    const emptyCells = cells.filter((c) => c.textContent === "");
+    await expect(emptyCells.length).toBeGreaterThan(0);
+
+    // Les cases cibles affichent encore leur label
+    const targetCells = Array.from(board.querySelectorAll(".ring-2"));
+    for (const cell of targetCells) {
+      await expect(cell.textContent!.trim().length).toBeGreaterThan(0);
+    }
+
+    // La légende est masquée (visibility: hidden)
+    const legend = board.querySelector("div.mt-2");
+    if (legend) {
+      await expect((legend as HTMLElement).style.visibility).toBe("hidden");
+    }
+  },
 };
 
 export const PuzzleDay: StoryObj = {
@@ -208,6 +252,33 @@ export const PuzzleDay: StoryObj = {
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Le puzzle-board est rendu avec la config puzzle-day
+    const board = canvasElement.querySelector("puzzle-board");
+    await expect(board).toBeTruthy();
+
+    // Puzzle Jour a 7×7 - quelques null = ~47 cells
+    const cells = canvasElement.querySelectorAll("puzzle-board div > div");
+    await expect(cells.length).toBeGreaterThan(30);
+
+    // 2 cases cibles (month + day, pas de weekday)
+    const targetCells = canvasElement.querySelectorAll("puzzle-board .ring-2");
+    await expect(targetCells.length).toBe(2);
+
+    // Le résultat affiche "Solution" ou "Aucune solution"
+    const info = canvas.getByText(/Solution|Aucune/);
+    await expect(info).toBeTruthy();
+
+    // 8 pièces dans la légende (puzzle-day a 8 pièces)
+    const badges = canvasElement.querySelectorAll("puzzle-board span.inline-flex");
+    await expect(badges.length).toBe(8);
+
+    // Le date picker affiche 2 selects (month + day)
+    const selects = canvasElement.querySelectorAll("select");
+    await expect(selects.length).toBe(2);
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -347,6 +418,43 @@ export const ApiDemo: StoryObj = {
     cellRatio: 1,
   },
   render: (args) => renderApiDemo(args as PuzzleBoardArgs),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Le board est rendu avec une solution initiale
+    const board = canvasElement.querySelector("puzzle-board");
+    await expect(board).toBeTruthy();
+
+    // Le status affiche un résultat
+    await waitFor(() => {
+      const status = canvas.getByText(/essais/);
+      expect(status).toBeTruthy();
+    });
+
+    // Le code snippet est visible
+    const code = canvasElement.querySelector("pre code");
+    await expect(code).toBeTruthy();
+    await expect(code!.textContent).toContain("todayTarget");
+
+    // Click sur le bouton custom date
+    const btnCustom = canvas.getByText(/month: 'Sep'/);
+    await userEvent.click(btnCustom);
+
+    // Le status est mis à jour
+    await waitFor(() => {
+      const status = canvas.getByText(/essais/);
+      expect(status).toBeTruthy();
+    });
+
+    // Click sur todayTarget
+    const btnToday = canvas.getByText("todayTarget(config)");
+    await userEvent.click(btnToday);
+
+    await waitFor(() => {
+      const status = canvas.getByText(/essais/);
+      expect(status).toBeTruthy();
+    });
+  },
 };
 
 export const EmptyBoard: StoryObj = {
@@ -359,4 +467,19 @@ export const EmptyBoard: StoryObj = {
     cellRatio: 1,
   },
   render: (args) => renderBoard(args as PuzzleBoardArgs),
+  play: async ({ canvasElement }) => {
+    // Le board est rendu
+    const board = canvasElement.querySelector("puzzle-board");
+    await expect(board).toBeTruthy();
+
+    // Le texte de résultat est vide (showResult=false)
+    const info = canvasElement.querySelector("p");
+    await expect(info!.textContent).toBe("");
+
+    // La légende est masquée (visibility: hidden)
+    const legend = board!.querySelector("div.mt-2");
+    if (legend) {
+      await expect((legend as HTMLElement).style.visibility).toBe("hidden");
+    }
+  },
 };

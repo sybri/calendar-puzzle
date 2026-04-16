@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { expect } from "storybook/test";
 import type { PuzzleConfig } from "../config.js";
 import type { PieceColor } from "../render/puzzle-board.js";
 import "../render/puzzle-board.js";
@@ -97,6 +98,10 @@ puzzle-board .border-l-2 { border-left-width: 3px; }
 
 export default meta;
 
+function hasClass(el: Element, prefix: string): boolean {
+  return el.className.split(" ").some((cls) => cls.startsWith(prefix));
+}
+
 export const SoberTheme: StoryObj = {
   name: "Sobre (sans couleur)",
   render: () =>
@@ -117,6 +122,18 @@ export const SoberTheme: StoryObj = {
       emptyClasses: "bg-white text-gray-400",
       borderColor: "border-gray-400",
     }),
+  play: async ({ canvasElement }) => {
+    const board = canvasElement.querySelector("puzzle-board")!;
+    const cells = Array.from(board.querySelectorAll("div > div.flex"));
+
+    // Les pièces utilisent des gris (bg-gray-200 ou bg-gray-300)
+    const grayCells = cells.filter((c) => hasClass(c, "bg-gray-"));
+    await expect(grayCells.length).toBeGreaterThan(0);
+
+    // Les cases cibles ont bg-gray-900
+    const targets = board.querySelectorAll(".ring-2");
+    await expect(targets.length).toBe(3);
+  },
 };
 
 export const PastelTheme: StoryObj = {
@@ -139,6 +156,21 @@ export const PastelTheme: StoryObj = {
       emptyClasses: "bg-gray-50 text-gray-400",
       borderColor: "border-gray-300",
     }),
+  play: async ({ canvasElement }) => {
+    const board = canvasElement.querySelector("puzzle-board")!;
+    const cells = Array.from(board.querySelectorAll("div > div.flex"));
+
+    // Les pièces utilisent des couleurs pastel (bg-rose-, bg-sky-, etc.)
+    const pastelCells = cells.filter(
+      (c) => hasClass(c, "bg-rose-") || hasClass(c, "bg-sky-") ||
+        hasClass(c, "bg-amber-") || hasClass(c, "bg-emerald-"),
+    );
+    await expect(pastelCells.length).toBeGreaterThan(0);
+
+    // Les cases cibles existent
+    const targets = board.querySelectorAll(".ring-2");
+    await expect(targets.length).toBe(3);
+  },
 };
 
 export const HighContrast: StoryObj = {
@@ -160,4 +192,19 @@ export const HighContrast: StoryObj = {
       targetClasses: "bg-yellow-400 text-black font-bold ring-2 ring-black",
       emptyClasses: "bg-gray-100 text-gray-500",
     }),
+  play: async ({ canvasElement }) => {
+    const board = canvasElement.querySelector("puzzle-board")!;
+    const cells = Array.from(board.querySelectorAll("div > div.flex"));
+
+    // Les pièces alternent bg-black / bg-white
+    const bwCells = cells.filter(
+      (c) => c.className.includes("bg-black") || c.className.includes("bg-white"),
+    );
+    await expect(bwCells.length).toBeGreaterThan(0);
+
+    // Les cases cibles ont bg-yellow-400
+    const targets = Array.from(board.querySelectorAll(".ring-2"));
+    const yellowTargets = targets.filter((c) => c.className.includes("bg-yellow-400"));
+    await expect(yellowTargets.length).toBe(3);
+  },
 };
