@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/sybri/calendar-puzzle/compare/v1.0.0...v1.0.1) (2026-04-16)
+
+
+### Bug Fixes
+
+* **render:** prevent layout shift when toggling showLegend ([167dc94](https://github.com/sybri/calendar-puzzle/commit/167dc9496054b30fa24eea6c8acd89f63a03590c))
+
 # 1.0.0 (2026-04-16)
 
 
