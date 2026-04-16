@@ -9,14 +9,51 @@ import wooodzConfig from "../../configs/wooodz-calendar.json";
 const config = wooodzConfig as PuzzleConfig;
 const target = { month: "Avr", day: "16", weekday: "Mercredi" };
 
+function buildSnippet(options: {
+  pieceColors: PieceColor[];
+  targetClasses: string;
+  emptyClasses: string;
+  borderColor?: string;
+}): string {
+  const colorsStr = options.pieceColors
+    .map((c) => `  { bg: "${c.bg}", text: "${c.text}" }`)
+    .join(",\n");
+
+  let snippet = `const board = document.querySelector("puzzle-board");
+
+board.pieceColors = [
+${colorsStr}
+];
+board.targetClasses = "${options.targetClasses}";
+board.emptyClasses = "${options.emptyClasses}";`;
+
+  if (options.borderColor) {
+    snippet += `
+
+// Surcharge de la couleur de bordure
+board.querySelectorAll("[class*=border-gray-800]")
+  .forEach(el => {
+    el.classList.replace("border-gray-800", "${options.borderColor}");
+  });`;
+  }
+
+  return snippet;
+}
+
 function renderThemed(options: {
   pieceColors: PieceColor[];
   targetClasses: string;
   emptyClasses: string;
   borderColor?: string;
 }) {
-  const wrapper = document.createElement("div");
-  wrapper.style.width = "min(28rem, 100%)";
+  const root = document.createElement("div");
+  root.style.display = "flex";
+  root.style.flexDirection = "column";
+  root.style.gap = "1.5rem";
+  root.style.maxWidth = "56rem";
+
+  const boardWrap = document.createElement("div");
+  boardWrap.style.width = "min(28rem, 100%)";
 
   const boardEl = document.createElement("puzzle-board") as any;
   boardEl.className = "block";
@@ -27,7 +64,8 @@ function renderThemed(options: {
   boardEl.emptyClasses = options.emptyClasses;
   boardEl.resolve();
 
-  wrapper.appendChild(boardEl);
+  boardWrap.appendChild(boardEl);
+  root.appendChild(boardWrap);
 
   // Surcharge couleur de bordure si demandé
   if (options.borderColor) {
@@ -41,7 +79,23 @@ function renderThemed(options: {
     });
   }
 
-  return wrapper;
+  // Code snippet
+  const pre = document.createElement("pre");
+  pre.style.background = "#1e293b";
+  pre.style.color = "#e2e8f0";
+  pre.style.padding = "1rem";
+  pre.style.borderRadius = "0.5rem";
+  pre.style.fontSize = "0.8rem";
+  pre.style.lineHeight = "1.5";
+  pre.style.overflowX = "auto";
+  pre.style.margin = "0";
+
+  const code = document.createElement("code");
+  code.textContent = buildSnippet(options);
+  pre.appendChild(code);
+  root.appendChild(pre);
+
+  return root;
 }
 
 const meta: Meta = {
