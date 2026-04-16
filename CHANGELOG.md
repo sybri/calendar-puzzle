@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/sybri/calendar-puzzle/compare/v1.0.1...v1.1.0) (2026-04-16)
+
+
+### Bug Fixes
+
+* **storybook:** make date controls dynamic based on puzzle config ([95f9d34](https://github.com/sybri/calendar-puzzle/commit/95f9d34c804db9b0ba32ea2b988576033cd0734d))
+
+
+### Features
+
+* **storybook:** add API Demo story with todayTarget utility ([a234102](https://github.com/sybri/calendar-puzzle/commit/a2341021bcac83515d7f7f852657ef23b4b4f6d9))
+
 ## [1.0.1](https://github.com/sybri/calendar-puzzle/compare/v1.0.0...v1.0.1) (2026-04-16)
 
 
